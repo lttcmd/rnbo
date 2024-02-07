@@ -9,7 +9,7 @@ let x;
 let currentMouseX = canvasSize / 2;
 let currentMouseY = canvasSize / 2;
 
-const clientWS = new WebSocket('ws://192.168.1.78:8080');
+const clientWS = new WebSocket('wss://seahorse-app-hh7j7.ondigitalocean.app');
 
 clientWS.onopen = () => {
 };
