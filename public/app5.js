@@ -6,7 +6,7 @@ let lastShapeDrawnTime = 0;
 let audioContext;
 let device;
 
-const clientWS = new WebSocket('wss://seahorse-app-hh7j7.ondigitalocean.app');
+const clientWS = new WebSocket('ws://192.168.1.78:8080');
 
 clientWS.onopen = () => {
     console.log('WebSocket connection established');
