@@ -9,7 +9,7 @@ let x;
 let currentMouseX = canvasSize / 2;
 let currentMouseY = canvasSize / 2;
 
-const clientWS = new WebSocket('wss://localhost:8080');
+const clientWS = new WebSocket('wss://localhost');
 
 clientWS.onopen = () => {
 };
