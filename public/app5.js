@@ -12,6 +12,7 @@ clientWS.onopen = () => {
     console.log('WebSocket connection established');
 };
 
+// Update the WebSocket message event handler to log messages from out4
 clientWS.onmessage = (event) => {
     const message = JSON.parse(event.data);
 
@@ -19,10 +20,12 @@ clientWS.onmessage = (event) => {
     if (message.type === 'out4Message') {
         console.log('Received message from out4:', message.data);
         
-        // Here you can handle the message data, such as updating a variable
-        // or calling a function with the message data as an argument
+        // Trigger drawing a jagged shape at the current mouse position
+        // This ensures that the shape is drawn whenever a message from out4 is received
+        drawJaggedShape(mouseX, mouseY);
     }
 };
+
 function setup() {
     // Creating a canvas with a specified width and height
     let canvas = createCanvas(canvasSize, canvasSize);
@@ -50,40 +53,37 @@ function draw() {
     background(mouseY / 2, 100, 100);
   }
 
-  // Draw a new jagged shape every 100ms without redrawing the background
+  // Draw a new jagged shape at the mouse position if 100ms have passed since the last shape was drawn
   if (millis() - lastShapeDrawnTime > 100) {
     drawJaggedShape(mouseX, mouseY);
     lastShapeDrawnTime = millis();
+    
+    // Also send the current mouse position to the WebSocket server
+    sendMousePositionToWebSocket(mouseX, mouseY);
   }
+}
 
-        // Send the mouse position to the WebSocket server
-        sendMousePositionToWebSocket(mouseX, mouseY);
+function sendMousePositionToWebSocket(x, y) {
+    if (clientWS && clientWS.readyState === WebSocket.OPEN) {
+        // Mapping the mouse coordinates to a desired range if necessary
+        let xValue = map(x, 0, width, 1, 100); // Map x from canvas range to your desired range
+        let yValue = map(y, 0, height, 1500, 300); // Map y from canvas range to your desired range
+
+        // Construct the payload with the mouse coordinates
+        const payload = JSON.stringify({
+            type: 'app5',
+            x: xValue,
+            y: yValue
+        });
+
+        // Send the payload as a string via WebSocket
+        clientWS.send(payload);
     }
-
-    function sendMousePositionToWebSocket(x, y) {
-      if (clientWS && clientWS.readyState === WebSocket.OPEN) {
-          // Mapping the mouse coordinates to a desired range if necessary
-          let xValue = map(x, 0, width, 1, 100); // Map x from canvas range to your desired range
-          let yValue = map(y, 0, height, 1500, 300); // Map y from canvas range to your desired range
-  
-          // Construct the payload with the mouse coordinates
-          const payload = JSON.stringify({
-              type: 'app5',
-              x: xValue, // Continue sending x as before
-              y: yValue  // Add the new y mapping for 'app6value1'
-          });
-  
-          // Send the payload as a string via WebSocket
-          clientWS.send(payload);
-      }
-  }
-  
-
+}
 
 function drawJaggedShape(x, y) {
   // Assign a random static color for each shape
   fill(random(360), 100, 100);
-
   beginShape();
   // Define the number of vertices the shape will have
   const numVertices = int(random(25, 45));
