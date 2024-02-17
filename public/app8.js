@@ -11,7 +11,7 @@ let currentMouseY = canvasSize / 2;
 let activeSquares = Array(16).fill(false); // Track which squares are active
 
 
-const clientWS = new WebSocket('ws://192.168.1.78:8080');
+const clientWS = new WebSocket('wss://seahorse-app-hh7j7.ondigitalocean.app');
 
 clientWS.onopen = () => {
     // The connection is opened, perform any setup here if necessary
