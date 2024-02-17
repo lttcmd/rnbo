@@ -178,6 +178,15 @@ ws.onmessage = (event) => {
         applyApp7Parameters(data.xFreq, data.yFreq);
     }
 
+        else if (data.type === 'app8') {
+        // Check if the squares property exists and is a number
+        if (typeof data.squares === 'number') {
+            console.log(`Data received from app8: squares=${data.squares}`);
+            applyApp15Parameters(data.squares);
+        } else {
+            console.error('Squares value is missing or not a number.');
+        }
+    }
 };
     
 
@@ -288,5 +297,18 @@ function applyApp7Parameters(xFreq, yFreq) {
         console.log(`Applied app9value2 parameter with value: ${yFreq}`);
     } else {
         console.error('Device is not ready or "app9value2" parameter does not exist.');
+    }
+}
+
+
+function applyApp15Parameters(squares) {
+    if (device && device.parametersById.has("app15value1")) {
+        let app15value1 = device.parametersById.get("app15value1");
+        // Ensure the value is within the expected range (1 to 16)
+        let value = Math.max(1, Math.min(squares, 16));
+        app15value1.value = value;
+        console.log(`Applied app15 parameters: app15value1=${value}`);
+    } else {
+        console.error('Device is not ready or "app15value1" parameter does not exist.');
     }
 }
