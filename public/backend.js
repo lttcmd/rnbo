@@ -140,7 +140,7 @@ function mousePressed() {
     startAudioContext();
 }
 
-const ws = new WebSocket('wss://seahorse-app-hh7j7.ondigitalocean.app');
+const ws = new WebSocket('wss://urchin-app-v85gi.ondigitalocean.app/');
 
 ws.onopen = () => {
     console.log('Connected to server');
